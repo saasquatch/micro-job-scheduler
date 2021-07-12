@@ -8,7 +8,7 @@
 </p>
 
 Sometimes you just want to run tasks at a regular interval, with some concurrency, and the overhead of job scheduling
-systems like [agenda](https://github.com/agenda/agenda) are just to much.
+systems like [agenda](https://github.com/agenda/agenda) are just too much.
 
 This package implements a very simple job scheduler that allows you to run jobs on a schedule (defined by an ISO 8601
 duration), with support for running jobs of a particular type with a level of concurrency.
