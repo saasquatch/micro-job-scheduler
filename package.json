@@ -2,16 +2,13 @@
   "name": "micro-job-scheduler",
   "version": "0.0.1-0",
   "description": "Promise-based in-memory micro job scheduler",
-  "files": [
-    "dist/"
-  ],
+  "files": ["dist/"],
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "main": "dist/micro-job-scheduler.js",
   "module": "dist/micro-job-scheduler.module.js",
-  "unpkg": "dist/micro-job-scheduler.umd.js",
   "scripts": {
-    "build": "microbundle",
+    "build": "microbundle --target node -f esm,cjs",
     "test": "jest"
   },
   "repository": {
