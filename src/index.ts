@@ -1,6 +1,7 @@
 import createDebug from "debug";
 import { v4 as uuid } from "uuid";
 import { Duration, DateTime } from "luxon";
+import { EventEmitter } from "events";
 
 interface Job {
   id: string;
@@ -19,12 +20,10 @@ type JobOptions = Pick<Job, "durationBetweenRuns" | "concurrencyKey" | "fn">;
 
 const debug = createDebug("scheduler");
 
-class MicroJobScheduler {
+class MicroJobScheduler extends EventEmitter {
   private jobs: Job[] = [];
   private concurrency: Record<string, number> = {};
   private checkInterval: NodeJS.Timer | null = null;
-
-  constructor() {}
 
   start() {
     if (this.checkInterval) {
@@ -139,6 +138,7 @@ class MicroJobScheduler {
       job.concurrencyKey,
       job.data
     );
+    this.emit("jobStarted", job.id, job.data);
     try {
       job.lastResult = await job.fn(job.id, job.data);
       job.errored = false;
@@ -148,6 +148,7 @@ class MicroJobScheduler {
         job.concurrencyKey,
         job.lastResult
       );
+      this.emit("jobCompleted", job.id, job.data);
     } catch (e) {
       job.lastResult = e;
       job.errored = true;
@@ -157,6 +158,7 @@ class MicroJobScheduler {
         job.concurrencyKey,
         job.lastResult
       );
+      this.emit("jobFailed", job.id, job.data);
     } finally {
       job.running = false;
     }
