@@ -138,7 +138,7 @@ class MicroJobScheduler extends EventEmitter {
       job.concurrencyKey,
       job.data
     );
-    this.emit("jobStarted", job.id, job.data);
+    this.emit("jobStarted", { ...job });
     try {
       job.lastResult = await job.fn(job.id, job.data);
       job.errored = false;
@@ -148,7 +148,7 @@ class MicroJobScheduler extends EventEmitter {
         job.concurrencyKey,
         job.lastResult
       );
-      this.emit("jobCompleted", job.id, job.data);
+      this.emit("jobCompleted", { ...job });
     } catch (e) {
       job.lastResult = e;
       job.errored = true;
@@ -158,7 +158,7 @@ class MicroJobScheduler extends EventEmitter {
         job.concurrencyKey,
         job.lastResult
       );
-      this.emit("jobFailed", job.id, job.data);
+      this.emit("jobFailed", { ...job });
     } finally {
       job.running = false;
     }
