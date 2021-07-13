@@ -66,7 +66,15 @@ Add a job with the given options, and the given data. Options you can pass are:
 
 - `durationBetweenRuns`: An ISO8601 duration string, like `PT5M` to indicate 5 minutes
 - `concurrencyKey`: A string which groups jobs together for the purpose of concurrency
-- `fn`: The function to run your job, with the signature `fn(job: Job): Promise<any>`
+- `fn`: The function to run your job, with the signature `fn(job: Job): Promise<any>`.
+
+### `removeJob(jobId)`
+
+Removes a job from the scheduler.
+
+### `updateJobData(jobId, data)`
+
+Updates the data for a job.
 
 ### `setConcurrency(concurrencyKey, concurrency)`
 
