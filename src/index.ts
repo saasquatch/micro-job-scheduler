@@ -153,7 +153,7 @@ class MicroJobScheduler extends EventEmitter {
     );
     this.emit("jobStarted", { ...job });
     try {
-      job.lastResult = await job.fn(job);
+      job.lastResult = await job.fn({ ...job });
       job.errored = false;
       debug(
         "Job [%s] completed, concurrencyKey [%s], lastResult: [%o]",
