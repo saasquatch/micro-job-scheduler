@@ -9,7 +9,7 @@ interface Job {
   durationBetweenRuns: string;
   runs: number;
   data?: any;
-  fn: (jobid: string, data?: any) => Promise<any>;
+  fn: (job: Job) => Promise<any>;
   running: boolean;
   errored: boolean;
   lastStarted?: DateTime;
@@ -140,7 +140,7 @@ class MicroJobScheduler extends EventEmitter {
     );
     this.emit("jobStarted", { ...job });
     try {
-      job.lastResult = await job.fn(job.id, job.data);
+      job.lastResult = await job.fn({ ...job });
       job.errored = false;
       debug(
         "Job [%s] completed, concurrencyKey [%s], lastResult: [%o]",

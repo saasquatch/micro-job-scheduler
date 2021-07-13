@@ -37,11 +37,11 @@ for (let i = 0; i < 10; i++) {
 
 scheduler.setConcurrency("aJob", 2);
 
-async function aJob(jobId: string, data: any) {
+async function aJob(job: Job) {
   return new Promise((resolve) => {
-    console.log("A JOB IS RUNNING", jobId, data);
+    console.log("A JOB IS RUNNING", job.id, job.data);
     setTimeout(() => {
-      console.log("A JOB IS COMPLETED", jobId, data);
+      console.log("A JOB IS COMPLETED", job.id, job.data);
       resolve();
     }, 10000);
   });
@@ -66,7 +66,7 @@ Add a job with the given options, and the given data. Options you can pass are:
 
 - `durationBetweenRuns`: An ISO8601 duration string, like `PT5M` to indicate 5 minutes
 - `concurrencyKey`: A string which groups jobs together for the purpose of concurrency
-- `fn`: The function to run your job, with the signature `fn(jobid: string, data: any): Promise<any>`
+- `fn`: The function to run your job, with the signature `fn(job: Job): Promise<any>`
 
 ### `setConcurrency(concurrencyKey, concurrency)`
 
