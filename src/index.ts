@@ -3,12 +3,11 @@ import { v4 as uuid } from "uuid";
 import { Duration, DateTime } from "luxon";
 import { EventEmitter } from "events";
 
-interface Job {
+export interface Job<JobData = any> {
   id: string;
   concurrencyKey: string;
   durationBetweenRuns: string;
-  runs: number;
-  data?: any;
+  data?: JobData;
   fn: (job: Job) => Promise<any>;
   running: boolean;
   errored: boolean;
@@ -57,7 +56,6 @@ class MicroJobScheduler extends EventEmitter {
 
     const job: Job = {
       id: uuid(),
-      runs: 0,
       running: false,
       errored: false,
       data,
@@ -67,16 +65,15 @@ class MicroJobScheduler extends EventEmitter {
     this.jobs.push(job);
 
     debug(
-      "Added job [%s], concurrencyKey [%s], durationBetweenRuns [%s]",
+      "Added job [%s], concurrencyKey [%s], durationBetweenRuns [%s], data [%o]",
       job.id,
       job.concurrencyKey,
-      job.durationBetweenRuns
+      job.durationBetweenRuns,
+      job.data
     );
   }
 
   async schedule() {
-    debug("Running job scheduling...");
-
     const jobsByConcurrencyKey = this.jobs.reduce((prev, job) => {
       if (!prev[job.concurrencyKey]) {
         prev[job.concurrencyKey] = {
@@ -140,7 +137,7 @@ class MicroJobScheduler extends EventEmitter {
     );
     this.emit("jobStarted", { ...job });
     try {
-      job.lastResult = await job.fn({ ...job });
+      job.lastResult = await job.fn(job);
       job.errored = false;
       debug(
         "Job [%s] completed, concurrencyKey [%s], lastResult: [%o]",
@@ -156,7 +153,9 @@ class MicroJobScheduler extends EventEmitter {
         "Job [%s] errored, concurrencyKey [%s], lastResult: [%o]",
         job.id,
         job.concurrencyKey,
-        job.lastResult
+        job.lastResult instanceof Error
+          ? job.lastResult.message
+          : job.lastResult
       );
       this.emit("jobFailed", { ...job });
     } finally {
