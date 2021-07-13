@@ -71,6 +71,22 @@ class MicroJobScheduler extends EventEmitter {
       job.durationBetweenRuns,
       job.data
     );
+
+    return job.id;
+  }
+
+  removeJob(jobid: string) {
+    const jobIndex = this.jobs.findIndex((j) => j.id === jobid);
+    if (jobIndex > -1) {
+      this.jobs.splice(jobIndex, 1);
+    }
+  }
+
+  updateJobData(jobid: string, data?: any) {
+    const jobIndex = this.jobs.findIndex((j) => j.id === jobid);
+    if (jobIndex > -1) {
+      this.jobs[jobIndex]!.data = data;
+    }
   }
 
   async schedule() {
