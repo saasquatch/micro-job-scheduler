@@ -48,11 +48,7 @@ class MicroJobScheduler extends EventEmitter {
   }
 
   addJob(options: JobOptions, data?: any) {
-    if (!Duration.fromISO(options.durationBetweenRuns).isValid) {
-      throw new Error(
-        `"${options.durationBetweenRuns}" is not a valid ISO duration`
-      );
-    }
+    this.validateDuration(options.durationBetweenRuns);
 
     const job: Job = {
       id: uuid(),
@@ -91,9 +87,8 @@ class MicroJobScheduler extends EventEmitter {
   }
 
   updateJobData(jobid: string, data?: any) {
-    const jobIndex = this.jobs.findIndex((j) => j.id === jobid);
-    if (jobIndex > -1) {
-      const job = this.jobs[jobIndex]!;
+    const job = this.findJob(jobid);
+    if (job) {
       job.data = data;
       debug(
         "Updated job data [%s], concurrencyKey [%s], durationBetweenRuns [%s], data [%o]",
@@ -103,6 +98,25 @@ class MicroJobScheduler extends EventEmitter {
         job.data
       );
     }
+  }
+
+  updateJobDurationBetweenRuns(jobid: string, duration: string) {
+    const job = this.findJob(jobid);
+    if (job) {
+      this.validateDuration(duration);
+      job.durationBetweenRuns = duration;
+    }
+  }
+
+  private validateDuration(duration: string) {
+    if (!Duration.fromISO(duration).isValid) {
+      throw new Error(`"${duration}" is not a valid ISO duration`);
+    }
+  }
+
+  private findJob(jobid: string) {
+    const jobIndex = this.jobs.findIndex((j) => j.id === jobid);
+    return jobIndex > -1 ? this.jobs[jobIndex]! : null;
   }
 
   private async schedule() {
