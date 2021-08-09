@@ -17,7 +17,7 @@ export interface Job<JobData = any> {
 
 type JobOptions = Pick<Job, "durationBetweenRuns" | "concurrencyKey" | "fn">;
 
-const debug = createDebug("scheduler");
+const debug = createDebug("micro-job-scheduler");
 
 class MicroJobScheduler extends EventEmitter {
   private jobs: Job[] = [];
