@@ -1,6 +1,6 @@
 {
   "name": "micro-job-scheduler",
-  "version": "0.0.1-7",
+  "version": "1.0.0",
   "description": "Promise-based in-memory micro job scheduler",
   "files": [
     "dist/"
