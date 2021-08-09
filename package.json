@@ -1,0 +1,41 @@
+{
+  "name": "micro-job-scheduler",
+  "version": "1.0.0",
+  "description": "Promise-based in-memory micro job scheduler",
+  "files": [
+    "dist/"
+  ],
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "main": "dist/micro-job-scheduler.js",
+  "module": "dist/micro-job-scheduler.module.js",
+  "scripts": {
+    "build": "microbundle --target node -f esm,cjs",
+    "test": "jest",
+    "version": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/saasquatch/micro-job-scheduler.git"
+  },
+  "author": "Johan Venter <johan@saasquatch.com>",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^4.3.2",
+    "luxon": "^2.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.6",
+    "@types/jest": "^26.0.24",
+    "@types/luxon": "^1.27.1",
+    "@types/node": "^16.3.1",
+    "@types/uuid": "^8.3.1",
+    "jest": "^27.0.6",
+    "jest-cucumber": "^3.0.1",
+    "microbundle": "^0.13.3",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
