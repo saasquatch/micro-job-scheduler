@@ -157,14 +157,22 @@ class MicroJobScheduler extends EventEmitter {
       const concurrency = this.concurrency[concurrencyKey] || 1;
       let running = jobsByConcurrencyKey[concurrencyKey]!.running;
       while (running < concurrency) {
-        const jobToRun = jobs.find(
-          (j) =>
-            !j.running &&
-            (!j.lastStarted ||
-              j.lastStarted
-                .plus(Duration.fromISO(j.durationBetweenRuns))
-                .diffNow().milliseconds <= 0)
-        );
+        const jobToRun = jobs.find((j) => {
+          const duration = Duration.fromISO(j.durationBetweenRuns);
+          const notRunning = !j.running;
+          const hasBeenRun = j.lastStarted !== undefined;
+          const isSingleShot = duration.toMillis() === 0;
+          const isDue =
+            j.lastStarted &&
+            j.lastStarted.plus(duration).diffNow().milliseconds <= 0;
+
+          // Single shot jobs should only ever be run once
+          if (hasBeenRun && isSingleShot) return false;
+
+          // Repeating jobs should run if they aren't already running and they've
+          // either never been run or are due to be run
+          return notRunning && (!hasBeenRun || isDue);
+        });
         if (!jobToRun) break;
         running++;
         this.runJob(jobToRun);
@@ -205,6 +213,15 @@ class MicroJobScheduler extends EventEmitter {
       );
       this.emit("jobFailed", { ...job });
     } finally {
+      if (Duration.fromISO(job.durationBetweenRuns).toMillis() === 0) {
+        // Single shot job, it should be removed from the scheduler
+        debug(
+          "Job [%s] is single-shot and should be removed, concurrencyKey [%s]",
+          job.id,
+          job.concurrencyKey
+        );
+        this.removeJob(job.id);
+      }
       job.running = false;
     }
   }
