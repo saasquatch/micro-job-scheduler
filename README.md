@@ -64,7 +64,10 @@ Stop the job scheduler.
 
 Add a job with the given options, and the given data. Options you can pass are:
 
-- `durationBetweenRuns`: An ISO8601 duration string, like `PT5M` to indicate 5 minutes
+- `durationBetweenRuns`: An ISO8601 duration string, like `PT5M` to indicate 5 minutes.
+  Use `PT0M` (or anything else that is a valid ISO8601 duration that is 0 seconds long)
+  for a single-shot job that should only be run once, and removed from the scheduler
+  when it completes (successfully or unsuccessfully).
 - `concurrencyKey`: A string which groups jobs together for the purpose of concurrency
 - `fn`: The function to run your job, with the signature `fn(job: Job): Promise<any>`.
 
