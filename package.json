@@ -1,6 +1,6 @@
 {
   "name": "micro-job-scheduler",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Promise-based in-memory micro job scheduler",
   "files": [
     "dist/"
@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/saasquatch/micro-job-scheduler.git"
   },
-  "author": "Johan Venter <johan@saasquatch.com>",
+  "author": "ReferralSaaSquatch.com, Inc.",
   "license": "MIT",
   "dependencies": {
     "debug": "^4.3.2",
