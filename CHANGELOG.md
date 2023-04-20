@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2023-04-20
+
+### Changed
+- Updated license copyright to be in line with SaaSquatch open-source policy.
+
 ## [1.1.0] - 2022-01-28
 
 ### Added
@@ -19,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/sasquatch/micro-job-scheduler/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/sasquatch/micro-job-scheduler/releases/tag/v1.1.0
-[1.0.0]: https://github.com/sasquatch/micro-job-scheduler/releases/tag/v1.0.0
+[unreleased]: https://github.com/saasquatch/micro-job-scheduler/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/saasquatch/micro-job-scheduler/releases/tag/v1.1.1
+[1.1.0]: https://github.com/saasquatch/micro-job-scheduler/releases/tag/v1.1.0
+[1.0.0]: https://github.com/saasquatch/micro-job-scheduler/releases/tag/v1.0.0
